@@ -148,31 +148,6 @@ class LSB:
             output += self._read(element, change)
 
         return output[:data_length]
-        
-        data_length = float('inf')
-        meta_read = 0
-        while len(output)<data_length:
-            try:
-                element = next(iterator)
-            except StopIteration:
-                return output
-            if not meta_read:
-                if len(output)>=META_DATA_LENGTH:
-                    data_length = int(output[:META_DATA_LENGTH])
-                    meta_read = 1
-            #If coordinate is negative, bin() will be -0b...
-            #So the first three chars have to be cut instead of only two
-            p,q=2,2
-            x = bin(int(element.get('x')))
-            if x[0]=='-':
-                p = 3
-            y = bin(int(element.get('y')))
-            if y[0]=='-':
-                q = 3
-            x = x[p:].zfill(change+1)
-            y = y[q:].zfill(change+1)
-            output += x[-change:]
-            output += y[-change:]
-        return output
+
     def __repr__(self):
         return "LSB(path={})".format(self.path)
